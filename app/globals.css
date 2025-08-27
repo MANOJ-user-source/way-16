@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-gold: #d4af37;
+  --color-onyx: #111111;
+}
+
+html,
+body {
+  background-color: var(--color-onyx);
+  color: #f5f5f5;
+}

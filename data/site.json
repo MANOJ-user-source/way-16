@@ -1,0 +1,95 @@
+{
+  "company": "16WAYS",
+  "tagline": "Your trusted partner in import and export.",
+  "about": "16WAYS is a trusted partner in the global import and export of high-quality automotive components. We specialize in supplying a comprehensive range of engine parts, transmission and drivetrain components, brake system parts, suspension and steering elements, fasteners, forgings, bearings, bushings, fuel system parts, casting and machining components, and sheet metal products. Our commitment to quality and reliability ensures that our clients receive only the best products for their automotive needs, sourced from leading manufacturers and delivered with exceptional service.",
+  "services": [
+    "Engine Parts",
+    "Transmission & Drivetrain Parts",
+    "Brake System Components",
+    "Suspension & Steering Parts",
+    "Fasteners & Forgings",
+    "Bearings & Bushings",
+    "Fuel System & Filters",
+    "Casting & Machining Components",
+    "Sheet Metal Parts"
+  ],
+  "products": [
+    {
+      "category": "Engine Parts",
+      "items": [
+        "Cylinder liners & sleeves",
+        "Pistons & piston rings",
+        "Engine valves & valve guides",
+        "Crankshafts & camshafts",
+        "Timing gears",
+        "Rocker arms"
+      ]
+    },
+    {
+      "category": "Transmission & Drivetrain Parts",
+      "items": [
+        "Clutch plates",
+        "Pressure plates",
+        "Flywheels",
+        "Gear shafts",
+        "Differential components"
+      ]
+    },
+    {
+      "category": "Brake System Components",
+      "items": [
+        "Brake drums & brake discs",
+        "Brake linings & pads",
+        "Brake shoes"
+      ]
+    },
+    {
+      "category": "Suspension & Steering Parts",
+      "items": [
+        "Tie rods & tie rod ends",
+        "Ball joints",
+        "Suspension arms",
+        "Leaf springs & U-bolts"
+      ]
+    },
+    {
+      "category": "Fasteners & Forgings",
+      "items": [
+        "High-tensile nuts & bolts",
+        "Washers, rivets",
+        "Forged components for suspension and engine"
+      ]
+    },
+    {
+      "category": "Bearings & Bushings",
+      "items": [
+        "Taper roller bearings",
+        "Bushes (bronze, metal-polymer)",
+        "Thrust washers"
+      ]
+    },
+    {
+      "category": "Fuel System & Filters",
+      "items": [
+        "Diesel engine nozzles",
+        "Fuel injection components",
+        "Fuel filters"
+      ]
+    },
+    {
+      "category": "Casting & Machining Components",
+      "items": [
+        "Cast iron and SG iron parts",
+        "Aluminum die-cast components",
+        "CNC-machined auto components"
+      ]
+    },
+    {
+      "category": "Sheet Metal Parts",
+      "items": [
+        "Stamping parts",
+        "Pressed auto parts"
+      ]
+    }
+  ]
+}
