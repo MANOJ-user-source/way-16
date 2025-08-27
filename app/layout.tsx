@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Inter, Playfair_Display } from 'next/font/google';
+import { headers } from 'next/headers';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '700', variable: '--font-playfair' });
@@ -16,8 +17,14 @@ export const metadata = {
 export const runtime = 'nodejs';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  // Access CSP nonce set in middleware if needed in Script tags
+  const nonce = headers().get('x-nonce') || undefined;
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        {nonce ? <meta property="csp-nonce" content={nonce} /> : null}
+        <meta name="theme-color" content="#111111" />
+      </head>
       <body className="bg-onyx text-white">
         <Navbar />
         {/* Add padding top to account for fixed navbar height */}
@@ -27,4 +34,3 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     </html>
   );
 }
-

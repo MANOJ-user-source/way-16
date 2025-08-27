@@ -1,8 +1,30 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+function generateNonce(): string {
+  const bytes = new Uint8Array(16);
+  // Web Crypto in Edge Runtime
+  crypto.getRandomValues(bytes);
+  let str = '';
+  for (let i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
+  // btoa is available in the runtime; fallback to hex if not
+  try {
+    return btoa(str);
+  } catch {
+    return Array.from(bytes)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+}
+
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  const nonce = generateNonce();
+
+  // Make nonce available to the app via request headers
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-nonce', nonce);
+
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
 
   // Core security headers
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
@@ -14,12 +36,12 @@ export function middleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV !== 'production';
 
   // In dev, Next.js uses inline styles and eval for HMR; relax CSP accordingly.
-  // In prod, keep it tighter but still allow inline styles commonly used by Next.
+  // In prod, use nonce-based script policy and allow inline styles (Next injects some styles).
   const csp = isDev
     ? [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
-        "style-src 'self' 'unsafe-inline' blob:",
+        `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: 'nonce-${nonce}'`,
+        `style-src 'self' 'unsafe-inline' blob: 'nonce-${nonce}'`,
         "img-src 'self' data: blob:",
         "font-src 'self' data:",
         "connect-src 'self' ws: wss:",
@@ -30,8 +52,8 @@ export function middleware(request: NextRequest) {
       ].join('; ')
     : [
         "default-src 'self'",
-        "script-src 'self'",
-        "style-src 'self' 'unsafe-inline'",
+        `script-src 'self' 'strict-dynamic' 'nonce-${nonce}'`,
+        `style-src 'self' 'unsafe-inline' 'nonce-${nonce}'`,
         "img-src 'self' data:",
         "font-src 'self' data:",
         "connect-src 'self'",
@@ -41,6 +63,7 @@ export function middleware(request: NextRequest) {
         "form-action 'self'",
       ].join('; ');
 
+  response.headers.set('x-nonce', nonce);
   response.headers.set('Content-Security-Policy', csp);
   return response;
 }
