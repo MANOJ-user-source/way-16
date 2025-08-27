@@ -34,3 +34,4 @@ export default function CategoryCard({ category }: { category: Category }) {
     </Link>
   );
 }
+

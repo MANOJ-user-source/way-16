@@ -1,16 +1,9 @@
 import Hero from '../components/Hero';
-import CategoryCard, { Category } from '../components/CategoryCard';
-
-const categories: Category[] = [
-  { name: 'Engine Parts', slug: 'engine-parts', image: '/images/Engine part.png' },
-  { name: 'Transmission & Drivetrain', slug: 'transmission-drivetrain', image: '/images/Transmission & Drivetrain Parts.png' },
-  { name: 'Suspension & Steering', slug: 'suspension-steering', image: '/images/Suspension & Steering Parts.png' },
-  { name: 'Brake Components', slug: 'brake-components', image: '/images/Brake System Components.png' },
-  { name: 'Bearings & Bushings', slug: 'bearings-bushings', image: '/images/Bearings & Bushings.png' },
-  { name: 'Metal Components', slug: 'metal-components', image: '/images/Casting & Machining Components.png' },
-];
+import CategoryCard from '../components/CategoryCard';
+import { getCategories } from '../lib/products';
 
 export default function Home() {
+  const categories = getCategories();
   return (
     <>
       <Hero />
@@ -18,7 +11,7 @@ export default function Home() {
         <h2 className="text-3xl font-serif text-gold mb-8">Featured Categories</h2>
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {categories.map((cat) => (
-            <CategoryCard key={cat.slug} category={cat} />
+            <CategoryCard key={cat.slug} category={{ name: cat.name, slug: cat.slug, image: cat.image, count: cat.items.length }} />
           ))}
         </div>
       </section>

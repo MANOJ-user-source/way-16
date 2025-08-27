@@ -1,36 +1,32 @@
-import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import ProductItemCard from "../../../components/ProductItemCard";
+import { getCategories, getCategoryBySlug } from "../../../lib/products";
 
-const categoryData: Record<string, { name: string; description: string }> = {
-  'engine-parts': { name: 'Engine Parts', description: 'Products in this category will be available soon.' },
-  'transmission-drivetrain': { name: 'Transmission & Drivetrain', description: 'Products in this category will be available soon.' },
-  'suspension-steering': { name: 'Suspension & Steering', description: 'Products in this category will be available soon.' },
-  'brake-components': { name: 'Brake Components', description: 'Products in this category will be available soon.' },
-  'bearings-bushings': { name: 'Bearings & Bushings', description: 'Products in this category will be available soon.' },
-  'metal-components': { name: 'Metal Components', description: 'Products in this category will be available soon.' },
-  'fasteners-misc': { name: 'Fasteners & Misc', description: 'Products in this category will be available soon.' },
-};
+export const runtime = 'nodejs';
 
-interface PageProps {
-  params: { slug: string };
+export async function generateStaticParams() {
+  // Provide params for static generation
+  return getCategories().map((c) => ({ slug: c.slug }));
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const cat = categoryData[params.slug];
-  return {
-    title: cat ? `${cat.name} - 16 WAYS` : 'Category - 16 WAYS',
-  };
-}
+export default function CategoryPage({ params }: { params: { slug: string } }) {
+  const category = getCategoryBySlug(params.slug);
+  if (!category) return notFound();
 
-export default function CategoryPage({ params }: PageProps) {
-  const cat = categoryData[params.slug];
-  if (!cat) {
-    return notFound();
-  }
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-serif text-gold mb-4">{cat.name}</h1>
-      <p className="text-gray-300">{cat.description}</p>
+    <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-serif text-gold">{category.name}</h1>
+        <Link href="/catalogue" className="text-sm text-gold hover:underline">
+          ← Back to catalogue
+        </Link>
+      </div>
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        {category.items.map((item) => (
+          <ProductItemCard key={item.name} name={item.name} image={item.image} />)
+        )}
+      </div>
     </div>
   );
 }

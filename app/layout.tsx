@@ -8,9 +8,12 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '700', variable: '--font-playfair' });
 
 export const metadata = {
-  title: '16 WAYS – Luxury Auto Parts',
+  title: '16 WAYS — Luxury Auto Parts',
   description: 'Premium import-export auto parts supplier',
 };
+
+// Ensure Node.js runtime for server components using fs/path
+export const runtime = 'nodejs';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -24,3 +27,4 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     </html>
   );
 }
+
