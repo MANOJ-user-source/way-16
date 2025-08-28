@@ -65,7 +65,7 @@ function findCategoryImage(categoryName: string): string {
   const norm = files.find((f) => normalizeForMatch(f.replace(/\.png$/i, "")) === target);
   if (norm) return `/images/${norm}`;
 
-  // Known alias for Engine Parts → Engine part.png
+  // Known alias for Engine Parts -> 'Engine part.png'
   if (/engine parts?/i.test(categoryName)) {
     const alias = files.find((f) => f.toLowerCase() === "engine part.png");
     if (alias) return `/images/${alias}`;
@@ -121,3 +121,4 @@ export function getCategoryBySlug(slug: string): ProductCategory | null {
   const cats = getCategories();
   return cats.find((c) => c.slug === slug) || null;
 }
+

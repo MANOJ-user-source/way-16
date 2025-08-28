@@ -16,6 +16,15 @@ export default function Navbar() {
   useEffect(() => {
     const nav = navRef.current!;
     const threshold = Math.max(120, window.innerHeight * 0.25);
+    let hideTimer: number | null = null;
+
+    const showAndScheduleHide = () => {
+      nav.classList.remove('nav-hidden');
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = window.setTimeout(() => {
+        nav.classList.add('nav-hidden');
+      }, 2500);
+    };
 
     const updateDock = () => {
       if (window.scrollY > threshold) nav.classList.add('dock-right');
@@ -36,6 +45,17 @@ export default function Navbar() {
     );
     updateDock();
 
+    // Auto-hide after scroll idle (2.5s)
+    const onScroll = () => showAndScheduleHide();
+    window.addEventListener('scroll', onScroll, { passive: true } as any);
+    // Also reappear on global pointer movement (mouse/touch)
+    window.addEventListener('pointermove', showAndScheduleHide, { passive: true } as any);
+    window.addEventListener('touchstart', showAndScheduleHide as any, { passive: true } as any);
+
+    // Ensure visible on mount and when user interacts with navbar
+    const onInteractShow = () => nav.classList.remove('nav-hidden');
+    ['mouseenter', 'focusin'].forEach((ev) => nav.addEventListener(ev, onInteractShow));
+
     // Gentle rotation of sheen
     let sheen = 0;
     let sheenRaf: number | null = null;
@@ -52,6 +72,10 @@ export default function Navbar() {
       ['pointermove', 'touchmove', 'pointerenter'].forEach((ev) =>
         nav.removeEventListener(ev as any, onNavPointer as any)
       );
+      window.removeEventListener('scroll', onScroll as any);
+      window.removeEventListener('pointermove', showAndScheduleHide as any);
+      window.removeEventListener('touchstart', showAndScheduleHide as any);
+      ['mouseenter', 'focusin'].forEach((ev) => nav.removeEventListener(ev, onInteractShow));
       if (sheenRaf) cancelAnimationFrame(sheenRaf);
     };
   }, []);

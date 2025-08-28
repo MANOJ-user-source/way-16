@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <section className="relative h-[60vh] flex flex-col justify-center items-center text-center overflow-hidden">
+    <section className="relative min-h-[100svh] flex flex-col justify-center items-center text-center overflow-hidden">
       {/* Background image */}
       <Image
         src="/images/Casting & Machining Components.png"

@@ -27,8 +27,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="bg-onyx text-white">
         <Navbar />
-        {/* Add padding top to account for fixed navbar height */}
-        <main className="pt-20">{children}</main>
+        {/* Full-bleed content: no top padding so content/images can extend under navbar */}
+        <main className="min-h-[100svh]">{children}</main>
         <Footer />
       </body>
     </html>

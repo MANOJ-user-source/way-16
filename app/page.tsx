@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <section className="max-w-7xl mx-auto px-4 py-16">
+      <section className="max-w-7xl mx-auto px-4 py-16 min-h-[100svh]">
         <h2 className="text-3xl font-serif text-gold mb-8">Featured Categories</h2>
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {categories.map((cat) => (
@@ -15,7 +15,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="bg-neutral-900 py-16">
+      <section className="bg-neutral-900 py-16 min-h-[100svh]">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl font-serif text-gold mb-4">Why 16 WAYS?</h2>
           <p className="text-gray-300 leading-relaxed">

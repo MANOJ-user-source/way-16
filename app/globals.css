@@ -75,15 +75,16 @@ body::before {
 .nav {
   position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
   z-index: 10; display: flex; align-items: center; gap: .75rem;
-  padding: .65rem .9rem; border-radius: 999px; isolation: isolate;
+  padding: .75rem 1rem; border-radius: 999px; isolation: isolate;
   border: 1px solid transparent;
   background:
     linear-gradient(var(--glass), var(--glass)) padding-box,
     linear-gradient(135deg,
       color-mix(in srgb, var(--gold-1) 65%, transparent),
       color-mix(in srgb, var(--gold-2) 35%, transparent)) border-box;
-  backdrop-filter: blur(16px) saturate(140%) contrast(108%) brightness(116%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%) contrast(108%) brightness(116%);
+  /* stronger watery optics */
+  backdrop-filter: blur(20px) saturate(160%) contrast(112%) brightness(118%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(112%) brightness(118%);
   box-shadow:
     0 12px 36px rgba(0,0,0,.35),
     inset 0 1px 0 rgba(255,255,255,.10),
@@ -119,15 +120,15 @@ body::before {
 @keyframes caustics { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
 
 .brand {
-  font-weight: 800; letter-spacing: .3px; padding: .35rem .6rem; border-radius: 999px;
+  font-weight: 800; letter-spacing: .3px; padding: .35rem .6rem; border-radius: 999px; font-size: 1rem;
   background: linear-gradient(90deg, var(--gold-2), var(--gold-1));
   -webkit-background-clip: text; background-clip: text; color: transparent;
   text-shadow: 0 0 0 rgba(0,0,0,0);
 }
 .links { display: flex; align-items: center; gap: .25rem; }
 .links a {
-  text-decoration: none; color: #f3f4f6; font-weight: 600; font-size: .93rem;
-  padding: .45rem .75rem; border-radius: 999px; position: relative;
+  text-decoration: none; color: #f3f4f6; font-weight: 600; font-size: .95rem;
+  padding: .5rem .8rem; border-radius: 999px; position: relative;
 }
 .links a::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit; opacity: 0;
@@ -155,7 +156,25 @@ body::before {
   .links a::after { display: none; }
   .nav::before, .nav::after { display: none; }
 }
-@media (max-width: 520px) { .brand { display: none; } }
+
+/* Slightly larger on desktop, tighter on mobile */
+@media (min-width: 1024px) {
+  .nav { padding: .9rem 1.2rem; }
+  .links a { font-size: 1rem; padding: .6rem .9rem; }
+  .brand { font-size: 1.1rem; letter-spacing: .35px; }
+}
+@media (max-width: 520px) {
+  .nav { padding: .5rem .6rem; gap: .5rem; }
+  .links a { font-size: .85rem; padding: .35rem .55rem; }
+  .brand { font-size: .95rem; }
+}
+
+@media (max-width: 380px) {
+  .links { display: none; }
+}
+
+/* Hide navbar after scroll idle */
+.nav.nav-hidden { opacity: 0; pointer-events: none; transition: opacity .35s ease; }
 
 /* Selection color */
 ::selection { background: rgba(212, 175, 55, 0.35); color: #111; }
