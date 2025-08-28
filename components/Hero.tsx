@@ -9,6 +9,7 @@ export default function Hero() {
         src="/images/Casting & Machining Components.png"
         alt="Precision engineering components"
         fill
+        sizes="100vw"
         priority
         className="object-cover scale-105"
       />

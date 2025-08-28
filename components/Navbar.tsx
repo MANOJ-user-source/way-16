@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -12,46 +11,61 @@ const links = [
 ];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const nav = navRef.current!;
+    const threshold = Math.max(120, window.innerHeight * 0.25);
+
+    const updateDock = () => {
+      if (window.scrollY > threshold) nav.classList.add('dock-right');
+      else nav.classList.remove('dock-right');
+    };
+    const onNavPointer = (e: any) => {
+      const pt = e.touches ? e.touches[0] : e;
+      const rect = nav.getBoundingClientRect();
+      const nx = ((pt.clientX - rect.left) / rect.width) * 100;
+      const ny = ((pt.clientY - rect.top) / rect.height) * 100;
+      nav.style.setProperty('--nx', Math.max(0, Math.min(100, nx)).toFixed(2) + '%');
+      nav.style.setProperty('--ny', Math.max(0, Math.min(100, ny)).toFixed(2) + '%');
+    };
+    document.addEventListener('scroll', updateDock, { passive: true } as any);
+    window.addEventListener('resize', updateDock);
+    ['pointermove', 'touchmove', 'pointerenter'].forEach((ev) =>
+      nav.addEventListener(ev as any, onNavPointer, { passive: true } as any)
+    );
+    updateDock();
+
+    // Gentle rotation of sheen
+    let sheen = 0;
+    let sheenRaf: number | null = null;
+    const spinSheen = () => {
+      sheen = (sheen + 0.5) % 360;
+      nav.style.setProperty('--sheen', sheen + 'deg');
+      sheenRaf = requestAnimationFrame(spinSheen);
+    };
+    spinSheen();
+
+    return () => {
+      document.removeEventListener('scroll', updateDock as any);
+      window.removeEventListener('resize', updateDock);
+      ['pointermove', 'touchmove', 'pointerenter'].forEach((ev) =>
+        nav.removeEventListener(ev as any, onNavPointer as any)
+      );
+      if (sheenRaf) cancelAnimationFrame(sheenRaf);
+    };
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between h-16">
-        <Link href="/" className="text-gold font-serif text-2xl">
-          16 WAYS
-        </Link>
-        <div className="hidden md:flex space-x-6">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-white hover:text-gold transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-        <button
-          className="md:hidden text-white"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+    <nav className="nav" ref={navRef} aria-label="Primary">
+      <div className="brand">16WAYS</div>
+      <div className="links">
+        {links.map((l) => (
+          <Link key={l.href} href={l.href}>
+            {l.label}
+          </Link>
+        ))}
       </div>
-      {open && (
-        <div className="md:hidden bg-black/90 backdrop-blur-md px-4 py-4 space-y-2">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block text-white hover:text-gold"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
     </nav>
   );
 }

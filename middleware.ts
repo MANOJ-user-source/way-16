@@ -37,14 +37,26 @@ export function middleware(request: NextRequest) {
 
   // In dev, Next.js uses inline styles and eval for HMR; relax CSP accordingly.
   // In prod, use nonce-based script policy and allow inline styles (Next injects some styles).
+  // Third-party hosts you knowingly use
+  const SCRIPT_HOSTS = [
+    'https://www.google-analytics.com',
+    'https://www.googletagmanager.com',
+  ];
+  const CONNECT_HOSTS = [
+    'https://www.google-analytics.com',
+    'https://vitals.vercel-insights.com',
+  ];
+
   const csp = isDev
     ? [
         "default-src 'self'",
-        `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: 'nonce-${nonce}'`,
-        `style-src 'self' 'unsafe-inline' blob: 'nonce-${nonce}'`,
+        // dev: allow HMR and inline/eval
+        `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ${SCRIPT_HOSTS.join(' ')}`,
+        // remove nonce from style-src to avoid blocking nonced/unnonced styles
+        `style-src 'self' 'unsafe-inline' blob:`,
         "img-src 'self' data: blob:",
         "font-src 'self' data:",
-        "connect-src 'self' ws: wss:",
+        `connect-src 'self' ws: wss: ${CONNECT_HOSTS.join(' ')}`,
         "object-src 'none'",
         "frame-ancestors 'none'",
         "base-uri 'self'",
@@ -52,11 +64,12 @@ export function middleware(request: NextRequest) {
       ].join('; ')
     : [
         "default-src 'self'",
-        `script-src 'self' 'strict-dynamic' 'nonce-${nonce}'`,
-        `style-src 'self' 'unsafe-inline' 'nonce-${nonce}'`,
+        // prod: pragmatic allowlist; if you later add nonce to scripts, we can tighten here
+        `script-src 'self' 'unsafe-inline' ${SCRIPT_HOSTS.join(' ')}`,
+        `style-src 'self' 'unsafe-inline'`,
         "img-src 'self' data:",
         "font-src 'self' data:",
-        "connect-src 'self'",
+        `connect-src 'self' ${CONNECT_HOSTS.join(' ')}`,
         "object-src 'none'",
         "frame-ancestors 'none'",
         "base-uri 'self'",

@@ -19,6 +19,7 @@ export default function CategoryCard({ category }: { category: Category }) {
           src={category.image || "/placeholder.png"}
           alt={category.name}
           fill
+          sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

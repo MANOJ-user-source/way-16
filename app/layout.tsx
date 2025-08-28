@@ -20,8 +20,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   // Access CSP nonce set in middleware if needed in Script tags
   const nonce = headers().get('x-nonce') || undefined;
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <head>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
+      <head suppressHydrationWarning>
         {nonce ? <meta property="csp-nonce" content={nonce} /> : null}
         <meta name="theme-color" content="#111111" />
       </head>
